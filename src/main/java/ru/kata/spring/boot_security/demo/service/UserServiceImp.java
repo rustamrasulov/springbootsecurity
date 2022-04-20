@@ -33,8 +33,6 @@ public class UserServiceImp implements UserDetailsService, UserService {
         if (user == null) {
             throw new UsernameNotFoundException("User doesn't exist!");
         }
-//        return SecurityUser.fromUser(user);
-        System.out.println(user);
         return new org.springframework.security.core.userdetails
                 .User(user.getUsername(),user.getPassword(),getAuthorities(user));
     }

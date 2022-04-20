@@ -27,7 +27,6 @@ public class UserController {
     public String getCurrentUser(Principal principal, ModelMap model) {
         User user = userService.findByUsername(userService.loadUserByUsername(principal.getName()).getUsername());
         model.addAttribute("user", user);
-        System.err.println("getCurrent" + userService.loadUserByUsername(principal.getName()));
         return "user";
     }
 }
