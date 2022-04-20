@@ -17,44 +17,50 @@ import ru.kata.spring.boot_security.demo.service.UserServiceImp;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-//    private final SuccessUserHandler successUserHandler;
-
-//    public WebSecurityConfig(SuccessUserHandler successUserHandler) {
-//        this.successUserHandler = successUserHandler;
-//    }
-
-    private final UserServiceImp userServiceImp;
 
     @Autowired
-    public WebSecurityConfig(@Qualifier("userService") UserServiceImp userServiceImp) {
+    private final SuccessUserHandler successUserHandler;
+
+    @Autowired
+    private final UserServiceImp userServiceImp;
+
+
+    @Autowired
+    public WebSecurityConfig(SuccessUserHandler successUserHandler, @Qualifier("userService") UserServiceImp userServiceImp) {
+        this.successUserHandler = successUserHandler;
         this.userServiceImp = userServiceImp;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/login/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/")
-                .and()
+                .successHandler(successUserHandler)
+                .loginProcessingUrl("/login").permitAll()
+        ;
+        http
+                .authorizeRequests()
+                .antMatchers("/login").anonymous()
+                .antMatchers("/user/**").hasRole("USER")
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
+        ;
+        http
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .deleteCookies("JSESSIONID")
                 .logoutSuccessUrl("/login")
-
-        ;
+                .and()
+                .csrf().disable()
         ;
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth)  {
         auth.authenticationProvider(daoAuthenticationProvider());
     }
 

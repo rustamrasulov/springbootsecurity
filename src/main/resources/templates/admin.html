@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -18,10 +17,20 @@
 <div align="center">
 
     <div>
-        <form th:method="GET" th:action="@{/new}">
-            <input type="submit" value="Add user">
-        </form>
-        <caption><h2>Users List</h2></caption>
+
+
+        <table>
+            <tr>
+                <th><form th:method="GET" th:action="@{/admin/new}">
+                    <input type="submit" value="Add user">
+                </form></th>
+                <th><form action="/user" method="get">
+                    <button type="submit">My info</button>
+                </form></th>
+            </tr>
+        </table>
+
+        <h2>Users List</h2>
         <table border="1" cellpadding="5">
             <tr>
                 <th>Id</th>
@@ -41,10 +50,10 @@
                         <div>
                             <table>
                                 <tr>
-                                    <th><form th:method="GET" th:action="@{/edit/{id}(id=${user.id})}">
+                                    <th><form th:method="GET" th:action="@{/admin/edit/{id}(id=${user.id})}">
                                         <input type="submit" value="Edit">
                                     </form></th>
-                                    <th><form th:method="DELETE" th:action="@{/delete/{id}(id=${user.id})}">
+                                    <th><form th:method="DELETE" th:action="@{/admin/delete/{id}(id=${user.id})}">
                                         <input type="submit" value="Delete">
                                     </form></th>
                                 </tr>

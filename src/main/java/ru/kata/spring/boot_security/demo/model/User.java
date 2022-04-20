@@ -1,9 +1,7 @@
 package ru.kata.spring.boot_security.demo.model;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -19,9 +17,12 @@ public class User{
     private String password;
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-//    @JoinTable(name = "users_roles")
-    private Set<Role> roles = new HashSet<>();
-
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "roles_id", referencedColumnName = "id")}
+    )
+    private List<Role> roles = new ArrayList<>();
 
     @Column(name = "first_name")
     private String firstName;
@@ -35,7 +36,8 @@ public class User{
     public User() {
     }
 
-    public User(String username, String password, Set<Role> roles, String firstName, String lastName, String email) {
+    public User(String username, String password, List<Role> roles,
+                String firstName, String lastName, String email) {
         this.username = username;
         this.password = password;
         this.roles = roles;
@@ -60,11 +62,11 @@ public class User{
         this.password = password;
     }
 
-    public Set<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 
@@ -117,4 +119,16 @@ public class User{
         return Objects.hash(id, username, password, roles, firstName, lastName, email);
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class RoleServiceImp implements RoleService{
 
-    private RoleDao roleDao;
+    private final RoleDao roleDao;
 
     @Autowired
     public RoleServiceImp(RoleDao roleDao) {
@@ -22,12 +22,14 @@ public class RoleServiceImp implements RoleService{
         return roleDao.findAll();
     }
 
-    /**
-     * @param id
-     * @return
-     */
     @Override
     public Role getById(Long id) {
         return roleDao.getById(id);
     }
+
+    @Override
+    public void saveRole(Role role) {
+        roleDao.save(role);
+    }
+
 }
