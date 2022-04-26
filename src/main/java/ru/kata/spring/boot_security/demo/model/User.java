@@ -1,11 +1,14 @@
 package ru.kata.spring.boot_security.demo.model;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import java.util.*;
 
 @Entity
 @Table(name = "users")
-public class User{
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,6 +36,8 @@ public class User{
     @Column(name = "email")
     private String email;
 
+    private Boolean isTrue = true;
+
     public User() {
     }
 
@@ -50,9 +55,7 @@ public class User{
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+
 
     public String getPassword() {
         return password;
@@ -130,5 +133,34 @@ public class User{
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return isTrue;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return isTrue;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return isTrue;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isTrue;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
     }
 }

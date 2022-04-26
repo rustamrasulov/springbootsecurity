@@ -21,10 +21,6 @@ public class UserPostConstruct {
         this.userService = userService;
         this.roleService = roleService;
     }
-
-//    public User(String username, String password, Set<Role> roles, String firstName,
-//    String lastName, String email)
-
     @PostConstruct
     private void postConstruct() {
         roleService.saveRole(new Role(1L,"ROLE_ADMIN"));
@@ -36,8 +32,5 @@ public class UserPostConstruct {
                 roleService.findAll().stream().filter(e -> e.getRoleName()
                         .contains("USER")).collect(Collectors.toList()),
                 "Merlin", "Monroe", "merlin@aol.com"));
-
-
-
     }
 }
